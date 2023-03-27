@@ -170,16 +170,6 @@ init
     });
 }
 
-exit
-{
-    vars.Helper.Dispose();
-}
-
-shutdown
-{
-    vars.Helper.Dispose();
-}
-
 update
 {
 	if (!String.IsNullOrWhiteSpace(vars.Helper.Scenes.Active.Name))	current.Scene = vars.Helper.Scenes.Active.Name;
@@ -353,4 +343,14 @@ reset
 onReset
 {
 	vars.Log("RESET");
+}
+
+exit
+{
+    vars.Helper.Dispose();
+}
+
+shutdown
+{
+    vars.Helper.Dispose();
 }
