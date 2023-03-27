@@ -267,7 +267,7 @@ split
 						else if (vars.bossLevels.Contains(current.Level))
 							{ if (vars.levelCompleted) doSplit = true; }
 						else 
-							{ if (vars.GetLocalRank(current.oldRank) >= 10 && (!settings["Flawless"] || vars.GetLocalRank(current.oldRank) == 17)) doSplit = true; }
+							{ if (vars.GetLocalRank(current.rank) >= 10 && (!settings["Flawless"] || vars.GetLocalRank(current.rank) == 17)) doSplit = true; }
 
 						if (doSplit)
 						{
