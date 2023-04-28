@@ -121,6 +121,12 @@ init
 		case "A2715D7A27D579C3AD2E76DC44E2CAC7" :
 			version = "v0.13.0 (r28)";
 			break;
+		case "4F6E03AFB7695F2E9F56398587B5508F" :
+			version = "v0.13.1 (r29)";
+			break;
+		default:
+			version = "Unknown version";
+			break;
 	}
 
     vars.Helper.TryLoad = (Func<dynamic, bool>)(mono =>
@@ -133,6 +139,8 @@ init
 
 		switch(version)
 		{
+			case "Unknown version":
+			case "v0.13.1 (r29)":
 			case "v0.13.0 (r28)":
 			case "v0.12.0 (r27)":
 				// SpeedrunValues
@@ -182,6 +190,8 @@ update
 
 	switch (version)
 	{
+		case "Unknown version":
+		case "v0.13.1 (r29)":
 		case "v0.13.0 (r28)":
 		case "v0.12.0 (r27)":
 			// Boss Levels
@@ -223,6 +233,8 @@ start
 	if (settings["BeansHopperMode"]) return (current.Scene == "scnGame" && current.Level == "BeansHopper" && current.barNumber == 3);
 	else switch(version)
 	{
+		case "Unknown version":
+		case "v0.13.1 (r29)":
 		case "v0.13.0 (r28)":
 		case "v0.12.0 (r27)":
 			return !old.inGame && current.inGame;
@@ -246,6 +258,8 @@ split
 {
 	switch(version)
 	{
+		case "Unknown version":
+		case "v0.13.1 (r29)":
 		case "v0.13.0 (r28)":
 		case "v0.12.0 (r27)":
 			if (settings["BeansHopperMode"]) return (!old.noGetSet && current.noGetSet);
@@ -312,6 +326,8 @@ isLoading
 {
 	switch(version)
 	{
+		case "Unknown version":
+		case "v0.13.1 (r29)":
 		case "v0.13.0 (r28)":
 		case "v0.12.0 (r27)":
 		    return current.isLoading;
@@ -328,6 +344,8 @@ reset
 {
 	switch(version)
 	{
+		case "Unknown version":
+		case "v0.13.1 (r29)":
 		case "v0.13.0 (r28)":
 		case "v0.12.0 (r27)":
 		    return old.inGame && !current.inGame && settings["AutoReset"];
