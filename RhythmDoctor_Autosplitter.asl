@@ -147,7 +147,8 @@ init
 				vars.Helper["inGame"] = mono.Make<bool>("SpeedrunValues", "inGame");
 				vars.Helper["isLoading"] = mono.Make<bool>("SpeedrunValues", "isLoading");
 				vars.Helper["Level"] = mono.MakeString("SpeedrunValues", "currentLevel");
-				vars.Helper["rank"] = mono.Make<int>("SpeedrunValues", "rank");
+				vars.Helper["stableRank"] = mono.Make<int>("SpeedrunValues", "rank");
+				vars.Helper["volatileRank"] = scnGame.Make<int>("_instance", "hud", HUD["mRank"]);
 				// vars.Helper["score"] = mono.Make<int>("SpeedrunValues", "score");
 				// vars.Helper["GameState"] = mono.Make<int>("SpeedrunValues", "currentGameState");
 	
@@ -176,16 +177,26 @@ init
 
         return true;
     });
+
+	current.rank = 0;
 }
 
 update
 {
 	if (!String.IsNullOrWhiteSpace(vars.Helper.Scenes.Active.Name))	current.Scene = vars.Helper.Scenes.Active.Name;
 
+	if (old.Scene != current.Scene) vars.Log("Scene changed from " + old.Scene + " to " + current.Scene);
+	
 	// Initialise checks at level start
 	if ((old.Scene == "scnLevelSelect" && current.Scene == "scnGame"))
 	{
 		vars.levelCompleted = false;
+		current.rank = 0;
+	}
+
+	if (old.volatileRank != current.volatileRank && current.volatileRank == current.stableRank)
+	{
+		current.rank = current.stableRank;
 	}
 
 	switch (version)
@@ -271,7 +282,7 @@ split
 					return settings["Intro"];
 				}
 
-				if (old.Scene == "scnGame" && current.Scene == "scnLevelSelect")
+				if (old.Scene == "scnGame" && current.Scene != "scnGame")
 				{
 					if (!vars.VisitedLevel.Contains(current.Level))
 					{
@@ -280,6 +291,8 @@ split
 							{ if (!settings["Flawless"] || current.score >= 60) doSplit = true; }
 						else if (vars.bossLevels.Contains(current.Level))
 							{ if (vars.levelCompleted) doSplit = true; }
+						else if (current.Level == "HelpingHands")
+							{ if (!settings["Flawless"] || vars.GetLocalRank(current.rank) == 17) doSplit = true; }
 						else 
 							{ if (vars.GetLocalRank(current.rank) >= 10 && (!settings["Flawless"] || vars.GetLocalRank(current.rank) == 17)) doSplit = true; }
 
@@ -304,7 +317,7 @@ split
 					return settings["Intro"];
 				}
 
-				if (vars.levelCompleted && (old.Scene == "scnGame" && current.Scene == "scnLevelSelect"))
+				if (vars.levelCompleted && (old.Scene == "scnGame" && current.Scene != "scnGame"))
 				{
 					if (!vars.VisitedLevel.Contains(current.Level))
 					{
@@ -348,12 +361,13 @@ reset
 		case "v0.13.1 (r29)":
 		case "v0.13.0 (r28)":
 		case "v0.12.0 (r27)":
-		    return old.inGame && !current.inGame && settings["AutoReset"];
+		    return old.inGame && !current.inGame && settings["AutoReset"] && current.Level != "HelpingHands";
 			break;
 
 		case "v0.11.6 (r26)":
 		case "v0.11.5 (r25)":
-			return old.Scene != "scnMenu" && current.Scene == "scnMenu" && settings["AutoReset"];
+			
+			return old.Scene != "scnMenu" && current.Scene == "scnMenu" && settings["AutoReset"] && current.Level != "HelpingHands";
 			break;
 	}
 }
