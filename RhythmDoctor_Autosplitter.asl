@@ -43,17 +43,23 @@ startup
 			{ "Steinway", true, "4-3: Steinway", "Levels" },
 			{ "SteinwayH", true, "4-3N: Steinway Reprise", "Levels" },
 			{ "KnowYou", true, "4-4: Know You", "Levels" },
+			{ "LuckyBreak", true, "5-1: Lucky Break", "Levels" },
+			{ "Injury", true, "5-1N: One Slip Too Late", "Levels" },
+			{ "Freezeshot", true, "5-2: Lo-fi Beats For Patients To Chill To", "Levels" },
+			{ "FreezeshotH", true, "5-2N: Unsustainable Inconsolable", "Levels" },
+			{ "AthleteTherapy", true, "5-3: Seventh-Inning Stretch", "Levels" },
+			{ "AthleteFinale", true, "5-X: Dreams Don't Stop", "Levels" },
 			{ "BlackestLuxuryCar", true, "MD-1: Blackest Luxury Car", "Levels" },
 			{ "TapeStopNight", true, "MD-2: tape/stop/night", "Levels" },
 			{ "The90sDecision", true, "MD-3: The 90s Decision", "Levels" },
 			{ "HelpingHands", true, "X-0: Helping Hands", "Levels" },
 			{ "ArtExercise", true, "X-1: Art Exercise", "Levels" },
 			{ "Unbeatable", true, "X-WOT: Worn Out Tapes", "Levels" },
-			{ "MeetAndTwet", true, "Meet And Tweet", "Levels" },
+			{ "MeetAndTweet", true, "X-MAT: Meet And Tweet", "Levels" },
 		{ "AutoReset", false, "Auto Reset when going back to Menu", null },
 	};
 
-	vars.bossLevels = new List<string>() { "OrientalInsomniac", "InsomniacHard", "Boss2", "Lesmis" };
+	vars.bossLevels = new List<string>() { "OrientalInsomniac", "InsomniacHard", "Boss2", "Lesmis", "AthleteFinale" };
 
 	vars.rank = new dynamic[,]
 	{
@@ -124,6 +130,9 @@ init
 		case "4F6E03AFB7695F2E9F56398587B5508F" :
 			version = "v0.13.1 (r29)";
 			break;
+		case "6DB3C6A773E02712E541D4F0F47FD41E" :
+			version = "v0.14.0 (r30)";
+			break;
 		default:
 			version = "Unknown version";
 			break;
@@ -140,6 +149,7 @@ init
 		switch(version)
 		{
 			case "Unknown version":
+			case "v0.14.0 (r30)":
 			case "v0.13.1 (r29)":
 			case "v0.13.0 (r28)":
 			case "v0.12.0 (r27)":
@@ -147,8 +157,7 @@ init
 				vars.Helper["inGame"] = mono.Make<bool>("SpeedrunValues", "inGame");
 				vars.Helper["isLoading"] = mono.Make<bool>("SpeedrunValues", "isLoading");
 				vars.Helper["Level"] = mono.MakeString("SpeedrunValues", "currentLevel");
-				vars.Helper["stableRank"] = mono.Make<int>("SpeedrunValues", "rank");
-				vars.Helper["volatileRank"] = scnGame.Make<int>("_instance", "hud", HUD["mRank"]);
+				vars.Helper["rank"] = mono.Make<int>("SpeedrunValues", "rank");
 				// vars.Helper["score"] = mono.Make<int>("SpeedrunValues", "score");
 				// vars.Helper["GameState"] = mono.Make<int>("SpeedrunValues", "currentGameState");
 	
@@ -177,8 +186,6 @@ init
 
         return true;
     });
-
-	current.rank = 0;
 }
 
 update
@@ -186,22 +193,17 @@ update
 	if (!String.IsNullOrWhiteSpace(vars.Helper.Scenes.Active.Name))	current.Scene = vars.Helper.Scenes.Active.Name;
 
 	if (old.Scene != current.Scene) vars.Log("Scene changed from " + old.Scene + " to " + current.Scene);
-	
+
 	// Initialise checks at level start
 	if ((old.Scene == "scnLevelSelect" && current.Scene == "scnGame"))
 	{
 		vars.levelCompleted = false;
-		current.rank = 0;
-	}
-
-	if (old.volatileRank != current.volatileRank && current.volatileRank == current.stableRank)
-	{
-		current.rank = current.stableRank;
 	}
 
 	switch (version)
 	{
 		case "Unknown version":
+		case "v0.14.0 (r30)":
 		case "v0.13.1 (r29)":
 		case "v0.13.0 (r28)":
 		case "v0.12.0 (r27)":
@@ -245,6 +247,7 @@ start
 	else switch(version)
 	{
 		case "Unknown version":
+		case "v0.14.0 (r30)":
 		case "v0.13.1 (r29)":
 		case "v0.13.0 (r28)":
 		case "v0.12.0 (r27)":
@@ -270,6 +273,7 @@ split
 	switch(version)
 	{
 		case "Unknown version":
+		case "v0.14.0 (r30)":
 		case "v0.13.1 (r29)":
 		case "v0.13.0 (r28)":
 		case "v0.12.0 (r27)":
@@ -340,6 +344,7 @@ isLoading
 	switch(version)
 	{
 		case "Unknown version":
+		case "v0.14.0 (r30)":
 		case "v0.13.1 (r29)":
 		case "v0.13.0 (r28)":
 		case "v0.12.0 (r27)":
@@ -358,6 +363,7 @@ reset
 	switch(version)
 	{
 		case "Unknown version":
+		case "v0.14.0 (r30)":
 		case "v0.13.1 (r29)":
 		case "v0.13.0 (r28)":
 		case "v0.12.0 (r27)":
